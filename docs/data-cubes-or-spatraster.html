@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 5 Data-cubes or SpatRaster | Data Visualization and Geospatial Analysis With R</title>
   <meta name="description" content="Chapter 5 Data-cubes or SpatRaster | Data Visualization and Geospatial Analysis With R" />
-  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 5 Data-cubes or SpatRaster | Data Visualization and Geospatial Analysis With R" />
   <meta property="og:type" content="book" />
@@ -20,7 +20,7 @@
   
   
 
-<meta name="author" content="Vinit Sehgal (Louisiana State University) &amp; Debasish Mishra (Texas A&amp;M University)" />
+<meta name="author" content="Vinit Sehgal (Louisiana State University), Debasish Mishra (Texas A&amp;M University) &amp; Frank Anyoka Adekilae (Louisiana State University)" />
 
 
 
@@ -51,17 +51,18 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
 <script src="libs/leaflet-1.3.1/leaflet.js"></script>
 <link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
 <script src="libs/proj4-2.6.2/proj4.min.js"></script>
 <script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
 <link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
-<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script>
-<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
-<script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
-<script src="libs/brick(sm)_697a2b-1/data_stars_bricksm658d43.txt"></script>
+<script src="libs/leaflet-binding-2.2.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-2.0.0/leaflet-providers_2.0.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.2.1/leaflet-providers-plugin.js"></script>
+<script src="libs/brick(sm)_937a64-1/data_stars_bricksm2ab351.txt"></script>
 <script src="libs/joda-0.0.1/joda.js"></script>
 <script src="libs/joda-0.0.1/addImageQuery-bindings.js"></script>
 <script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
@@ -84,7 +85,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -240,6 +241,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <hr />
 <p><strong>Whats is a <code>Spatraster</code>?</strong></p>
 A SpatRaster represents multi-layer (multi-variable) raster data. It always stores a number of fundamental parameters describing its geometry. These include the number of columns and rows, the spatial extent, and the Coordinate Reference System.
+<br>
 <center>
 <img src="SampleData-master/images/stack2022.png" style="width:90.0%" />
 </center>
@@ -318,10 +320,10 @@ A SpatRaster represents multi-layer (multi-variable) raster data. It always stor
 ## sources     : NDVI_resamp_2016-03-05.tif  
 ##               NDVI_resamp_2016-03-21.tif  
 ##               NDVI_resamp_2016-04-06.tif  
-##               ... and 3 more source(s)
+##               ... and 3 more sources
 ## names       : NDVI_~03-05, NDVI_~03-21, NDVI_~04-06, NDVI_~04-22, NDVI_~05-08, NDVI_~05-24 
-## min values  :  -0.2000000,  -0.1755170,  -0.1699783,  -0.1848017,  -0.1990750,  -0.1863334 
-## max values  :   0.9168695,   0.9095000,   0.9042087,   0.9123000,   0.9446000,   0.8917526</code></pre>
+## min values  :  -0.2000000,   -0.175517,  -0.1699783,  -0.1848017,   -0.199075,  -0.1863334 
+## max values  :   0.9168695,    0.909500,   0.9042087,   0.9123000,    0.944600,   0.8917526</code></pre>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="data-cubes-or-spatraster.html#cb71-1" tabindex="-1"></a><span class="co">#~~ Plot first 4 elements of NDVI SpatRaster</span></span>
 <span id="cb71-2"><a href="data-cubes-or-spatraster.html#cb71-2" tabindex="-1"></a><span class="co"># Function to add shapefile to a raster plot</span></span>
 <span id="cb71-3"><a href="data-cubes-or-spatraster.html#cb71-3" tabindex="-1"></a>addCoastlines<span class="ot">=</span><span class="cf">function</span>(){</span>
@@ -371,7 +373,7 @@ A SpatRaster represents multi-layer (multi-variable) raster data. It always stor
 <span id="cb73-3"><a href="data-cubes-or-spatraster.html#cb73-3" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
 <span id="cb73-4"><a href="data-cubes-or-spatraster.html#cb73-4" tabindex="-1"></a>loc<span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">&quot;./SampleData-master/location_points.xlsx&quot;</span>)</span>
 <span id="cb73-5"><a href="data-cubes-or-spatraster.html#cb73-5" tabindex="-1"></a><span class="fu">print</span>(loc)</span></code></pre></div>
-<pre><code>## # A tibble: 3 x 4
+<pre><code>## # A tibble: 3 × 4
 ##   Aridity   State     Longitude Latitude
 ##   &lt;chr&gt;     &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 Humid     Louisiana     -92.7     34.3
@@ -434,18 +436,18 @@ A SpatRaster represents multi-layer (multi-variable) raster data. It always stor
 <span id="cb81-6"><a href="data-cubes-or-spatraster.html#cb81-6" tabindex="-1"></a>                         <span class="fu">vect</span>(IPCC_shp),    <span class="co"># Shapefile for feature reference </span></span>
 <span id="cb81-7"><a href="data-cubes-or-spatraster.html#cb81-7" tabindex="-1"></a>                         <span class="at">fun=</span>mean, </span>
 <span id="cb81-8"><a href="data-cubes-or-spatraster.html#cb81-8" tabindex="-1"></a>                         <span class="at">na.rm=</span>T, </span>
-<span id="cb81-9"><a href="data-cubes-or-spatraster.html#cb81-9" tabindex="-1"></a>                         <span class="at">df=</span><span class="cn">TRUE</span>, </span>
+<span id="cb81-9"><a href="data-cubes-or-spatraster.html#cb81-9" tabindex="-1"></a>                         <span class="co">#df=TRUE, </span></span>
 <span id="cb81-10"><a href="data-cubes-or-spatraster.html#cb81-10" tabindex="-1"></a>                         <span class="at">method=</span><span class="st">&#39;bilinear&#39;</span>)</span>
 <span id="cb81-11"><a href="data-cubes-or-spatraster.html#cb81-11" tabindex="-1"></a></span>
 <span id="cb81-12"><a href="data-cubes-or-spatraster.html#cb81-12" tabindex="-1"></a><span class="fu">head</span>(ndvi_sp,<span class="at">n=</span><span class="dv">3</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div>
-<pre><code>##   ID NDVI_resamp_2016.01.01 NDVI_resamp_2016.01.17 NDVI_resamp_2016.02.02
-## 1  1            -0.08325353            -0.05983509            -0.04461097
-## 2  2             0.02765715             0.02737234             0.03172858
-## 3  3             0.21922899             0.22114161             0.21826435
-##   NDVI_resamp_2016.02.18
-## 1            -0.03795020
-## 2             0.03084664
-## 3             0.27331317</code></pre>
+<pre><code>##   ID NDVI_resamp_2016-01-01 NDVI_resamp_2016-01-17 NDVI_resamp_2016-02-02
+## 1  1            -0.08325353          -3.320059e+38          -3.319744e+38
+## 2  2             0.02765715          -2.329463e+38          -2.328498e+38
+## 3  3             0.21922899          -1.435967e+37          -1.435967e+37
+##   NDVI_resamp_2016-02-18
+## 1          -3.319115e+38
+## 2          -2.330106e+38
+## 3          -1.435967e+37</code></pre>
 <p>We can also use a classified raster like aridity data we previously used, to extract values corresponding to each class of values using <code>lapply</code> and selective filtering.
 Note: The two rasters must have same extent and resolution.</p>
 <div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="data-cubes-or-spatraster.html#cb83-1" tabindex="-1"></a><span class="co">#~~~~ Method 2: Extract values based on another raster</span></span>
@@ -850,7 +852,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/Vinit-Sehgal/lgar/edit/main/02-Largescale_Geospatial_Analysis.Rmd",
+"link": "https://github.com/Vinit-Sehgal/lgar/edit/main/02-Largescale_Geospatial_Analysis_2025.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -858,7 +860,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/Vinit-Sehgal/lgar/blob/main/02-Largescale_Geospatial_Analysis.Rmd",
+"link": "https://github.com/Vinit-Sehgal/lgar/blob/main/02-Largescale_Geospatial_Analysis_2025.Rmd",
 "text": null
 },
 "download": ["bookdownproj.pdf"],

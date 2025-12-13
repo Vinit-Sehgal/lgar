@@ -1,5 +1,18 @@
+.# R / RStudio
 .Rhistory
 .RData
-.Rproj.user
+.Rproj.user/
 *.Rproj
+
+# Bookdown build artifacts
 _bookdown_files/
+
+# Project files
+bookdownproj.Rmd
+
+# Large datasets (CRITICAL)
+SampleData-master/
+docs/SampleData-master/
+*.nc
+*.tif
+*.h5

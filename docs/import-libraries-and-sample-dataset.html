@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Import libraries and sample dataset | Data Visualization and Geospatial Analysis With R</title>
   <meta name="description" content="Chapter 2 Import libraries and sample dataset | Data Visualization and Geospatial Analysis With R" />
-  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Import libraries and sample dataset | Data Visualization and Geospatial Analysis With R" />
   <meta property="og:type" content="book" />
@@ -20,7 +20,7 @@
   
   
 
-<meta name="author" content="Vinit Sehgal (Louisiana State University) &amp; Debasish Mishra (Texas A&amp;M University)" />
+<meta name="author" content="Vinit Sehgal (Louisiana State University), Debasish Mishra (Texas A&amp;M University) &amp; Frank Anyoka Adekilae (Louisiana State University)" />
 
 
 
@@ -51,17 +51,18 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
 <script src="libs/leaflet-1.3.1/leaflet.js"></script>
 <link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
 <script src="libs/proj4-2.6.2/proj4.min.js"></script>
 <script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
 <link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
-<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script>
-<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
-<script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
-<script src="libs/brick(sm)_697a2b-1/data_stars_bricksm658d43.txt"></script>
+<script src="libs/leaflet-binding-2.2.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-2.0.0/leaflet-providers_2.0.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.2.1/leaflet-providers-plugin.js"></script>
+<script src="libs/brick(sm)_937a64-1/data_stars_bricksm2ab351.txt"></script>
 <script src="libs/joda-0.0.1/joda.js"></script>
 <script src="libs/joda-0.0.1/addImageQuery-bindings.js"></script>
 <script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
@@ -84,7 +85,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -268,7 +269,11 @@ The sample dataset for this excercise can be downloaded manually from <code>GitH
 <span id="cb2-10"><a href="import-libraries-and-sample-dataset.html#cb2-10" tabindex="-1"></a><span class="co">#             &quot;RColorBrewer&quot;,&quot;ncdf4&quot;,&quot;rasterVis&quot;, &quot;moments&quot;, &quot;tictoc&quot;, &quot;tibble&quot;)</span></span>
 <span id="cb2-11"><a href="import-libraries-and-sample-dataset.html#cb2-11" tabindex="-1"></a></span>
 <span id="cb2-12"><a href="import-libraries-and-sample-dataset.html#cb2-12" tabindex="-1"></a><span class="co"># Update packages if they are already installed</span></span>
-<span id="cb2-13"><a href="import-libraries-and-sample-dataset.html#cb2-13" tabindex="-1"></a><span class="co"># update.package(ask = FALSE)</span></span></code></pre></div>
+<span id="cb2-13"><a href="import-libraries-and-sample-dataset.html#cb2-13" tabindex="-1"></a><span class="co"># update.package(ask = FALSE)</span></span>
+<span id="cb2-14"><a href="import-libraries-and-sample-dataset.html#cb2-14" tabindex="-1"></a><span class="co"># Update all packages in your list</span></span>
+<span id="cb2-15"><a href="import-libraries-and-sample-dataset.html#cb2-15" tabindex="-1"></a><span class="co"># Install pacman if missing</span></span>
+<span id="cb2-16"><a href="import-libraries-and-sample-dataset.html#cb2-16" tabindex="-1"></a><span class="co">#if(!requireNamespace(&quot;pacman&quot;, quietly = TRUE)) install.packages(&quot;pacman&quot;)</span></span>
+<span id="cb2-17"><a href="import-libraries-and-sample-dataset.html#cb2-17" tabindex="-1"></a><span class="co">#pacman::p_update(char = lib_names)</span></span></code></pre></div>
 <p><em>Note</em>: The legacy R spatial infrastructure packages - <code>maptools</code>, <code>rgdal</code> and <code>rgeos</code> have been archived by CRAN from October 16, 2023; these retired packages will continue to be available as source packages on <a href="https://cran.r-project.org/src/contrib/Archive" class="uri">https://cran.r-project.org/src/contrib/Archive</a> but won’t undergo any further development.
 <br>
 We will now download the workshop repository, which contains all data we will use for this exercise.</p>
@@ -282,22 +287,24 @@ We will now download the workshop repository, which contains all data we will us
 <span id="cb3-8"><a href="import-libraries-and-sample-dataset.html#cb3-8" tabindex="-1"></a><span class="co"># getwd()                           # Current working directory</span></span>
 <span id="cb3-9"><a href="import-libraries-and-sample-dataset.html#cb3-9" tabindex="-1"></a><span class="fu">list.files</span>(<span class="st">&quot;./SampleData-master&quot;</span>)   <span class="co"># List folder contents</span></span></code></pre></div>
 <pre><code>##  [1] &quot;CMIP_land&quot;                               
-##  [2] &quot;functions&quot;                               
-##  [3] &quot;images&quot;                                  
-##  [4] &quot;Largescale_geospatial_analysis_2022.html&quot;
-##  [5] &quot;Largescale_geospatial_analysis_2023.html&quot;
-##  [6] &quot;location_points.xlsx&quot;                    
-##  [7] &quot;ne_10m_coastline&quot;                        
-##  [8] &quot;raster_files&quot;                            
-##  [9] &quot;README.md&quot;                               
-## [10] &quot;sample_pdfs&quot;                             
-## [11] &quot;SMAP_L3_USA.nc&quot;                          
-## [12] &quot;SMAPL4_H5&quot;                               
-## [13] &quot;SMAPL4_rasters&quot;                          
-## [14] &quot;SMOS_nc&quot;                                 
-## [15] &quot;USA_states&quot;                              
-## [16] &quot;Workbook_DVGAR21-Part1.html&quot;             
-## [17] &quot;Workbook_DVGAR21-Part2.html&quot;</code></pre>
+##  [2] &quot;CRN_data&quot;                                
+##  [3] &quot;functions&quot;                               
+##  [4] &quot;images&quot;                                  
+##  [5] &quot;Largescale_geospatial_analysis_2022.html&quot;
+##  [6] &quot;Largescale_geospatial_analysis_2023.html&quot;
+##  [7] &quot;location_points.xlsx&quot;                    
+##  [8] &quot;MOPEX&quot;                                   
+##  [9] &quot;ne_10m_coastline&quot;                        
+## [10] &quot;raster_files&quot;                            
+## [11] &quot;README.md&quot;                               
+## [12] &quot;sample_pdfs&quot;                             
+## [13] &quot;SMAP_L3_USA.nc&quot;                          
+## [14] &quot;SMAPL4_H5&quot;                               
+## [15] &quot;SMAPL4_rasters&quot;                          
+## [16] &quot;SMOS_nc&quot;                                 
+## [17] &quot;USA_states&quot;                              
+## [18] &quot;Workbook_DVGAR21-Part1.html&quot;             
+## [19] &quot;Workbook_DVGAR21-Part2.html&quot;</code></pre>
 <hr />
 </div>
             </section>
@@ -337,7 +344,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/Vinit-Sehgal/lgar/edit/main/02-Largescale_Geospatial_Analysis.Rmd",
+"link": "https://github.com/Vinit-Sehgal/lgar/edit/main/02-Largescale_Geospatial_Analysis_2025.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -345,7 +352,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/Vinit-Sehgal/lgar/blob/main/02-Largescale_Geospatial_Analysis.Rmd",
+"link": "https://github.com/Vinit-Sehgal/lgar/blob/main/02-Largescale_Geospatial_Analysis_2025.Rmd",
 "text": null
 },
 "download": ["bookdownproj.pdf"],

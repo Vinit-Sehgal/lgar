@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 6 Parallel computation for geospatial analysis | Data Visualization and Geospatial Analysis With R</title>
   <meta name="description" content="Chapter 6 Parallel computation for geospatial analysis | Data Visualization and Geospatial Analysis With R" />
-  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 6 Parallel computation for geospatial analysis | Data Visualization and Geospatial Analysis With R" />
   <meta property="og:type" content="book" />
@@ -20,7 +20,7 @@
   
   
 
-<meta name="author" content="Vinit Sehgal (Louisiana State University) &amp; Debasish Mishra (Texas A&amp;M University)" />
+<meta name="author" content="Vinit Sehgal (Louisiana State University), Debasish Mishra (Texas A&amp;M University) &amp; Frank Anyoka Adekilae (Louisiana State University)" />
 
 
 
@@ -51,17 +51,18 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
 <script src="libs/leaflet-1.3.1/leaflet.js"></script>
 <link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
 <script src="libs/proj4-2.6.2/proj4.min.js"></script>
 <script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
 <link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
-<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script>
-<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
-<script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
-<script src="libs/brick(sm)_697a2b-1/data_stars_bricksm658d43.txt"></script>
+<script src="libs/leaflet-binding-2.2.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-2.0.0/leaflet-providers_2.0.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.2.1/leaflet-providers-plugin.js"></script>
+<script src="libs/brick(sm)_937a64-1/data_stars_bricksm2ab351.txt"></script>
 <script src="libs/joda-0.0.1/joda.js"></script>
 <script src="libs/joda-0.0.1/addImageQuery-bindings.js"></script>
 <script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
@@ -84,7 +85,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -284,17 +285,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb113-21"><a href="parallel-computation-for-geospatial-analysis.html#cb113-21" tabindex="-1"></a>  },<span class="at">error =</span><span class="cf">function</span>(e){<span class="fu">return</span>(<span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">3</span>))})   <span class="co"># If Error== TRUE, return array with NA</span></span>
 <span id="cb113-22"><a href="parallel-computation-for-geospatial-analysis.html#cb113-22" tabindex="-1"></a>}</span>
 <span id="cb113-23"><a href="parallel-computation-for-geospatial-analysis.html#cb113-23" tabindex="-1"></a></span>
-<span id="cb113-24"><a href="parallel-computation-for-geospatial-analysis.html#cb113-24" tabindex="-1"></a></span>
-<span id="cb113-25"><a href="parallel-computation-for-geospatial-analysis.html#cb113-25" tabindex="-1"></a><span class="co"># Apply function to all grids in parallel</span></span>
-<span id="cb113-26"><a href="parallel-computation-for-geospatial-analysis.html#cb113-26" tabindex="-1"></a><span class="fu">tic</span>()</span>
-<span id="cb113-27"><a href="parallel-computation-for-geospatial-analysis.html#cb113-27" tabindex="-1"></a>stat_brk <span class="ot">=</span> <span class="fu">app</span>(SMAPBrk, </span>
-<span id="cb113-28"><a href="parallel-computation-for-geospatial-analysis.html#cb113-28" tabindex="-1"></a>               my_fun, </span>
-<span id="cb113-29"><a href="parallel-computation-for-geospatial-analysis.html#cb113-29" tabindex="-1"></a>               <span class="at">minSamp =</span> <span class="dv">50</span>,                           <span class="co"># Minimum assured samples for statistics</span></span>
-<span id="cb113-30"><a href="parallel-computation-for-geospatial-analysis.html#cb113-30" tabindex="-1"></a>               <span class="at">cores =</span>parallel<span class="sc">::</span><span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>)     <span class="co"># Leave one core for housekeeping</span></span>
-<span id="cb113-31"><a href="parallel-computation-for-geospatial-analysis.html#cb113-31" tabindex="-1"></a></span>
-<span id="cb113-32"><a href="parallel-computation-for-geospatial-analysis.html#cb113-32" tabindex="-1"></a><span class="fu">names</span>(stat_brk)<span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;Mean&quot;</span>, <span class="st">&quot;Variance&quot;</span>, <span class="st">&quot;Skewness&quot;</span>)      <span class="co"># Add layer names</span></span>
-<span id="cb113-33"><a href="parallel-computation-for-geospatial-analysis.html#cb113-33" tabindex="-1"></a><span class="fu">toc</span>()</span></code></pre></div>
-<pre><code>## 8.72 sec elapsed</code></pre>
+<span id="cb113-24"><a href="parallel-computation-for-geospatial-analysis.html#cb113-24" tabindex="-1"></a><span class="co"># Load the package</span></span>
+<span id="cb113-25"><a href="parallel-computation-for-geospatial-analysis.html#cb113-25" tabindex="-1"></a><span class="fu">library</span>(tictoc)</span>
+<span id="cb113-26"><a href="parallel-computation-for-geospatial-analysis.html#cb113-26" tabindex="-1"></a><span class="co"># Apply function to all grids in parallel</span></span>
+<span id="cb113-27"><a href="parallel-computation-for-geospatial-analysis.html#cb113-27" tabindex="-1"></a><span class="fu">tic</span>()</span>
+<span id="cb113-28"><a href="parallel-computation-for-geospatial-analysis.html#cb113-28" tabindex="-1"></a>stat_brk <span class="ot">=</span> <span class="fu">app</span>(SMAPBrk, </span>
+<span id="cb113-29"><a href="parallel-computation-for-geospatial-analysis.html#cb113-29" tabindex="-1"></a>               my_fun, </span>
+<span id="cb113-30"><a href="parallel-computation-for-geospatial-analysis.html#cb113-30" tabindex="-1"></a>               <span class="at">minSamp =</span> <span class="dv">50</span>,                           <span class="co"># Minimum assured samples for statistics</span></span>
+<span id="cb113-31"><a href="parallel-computation-for-geospatial-analysis.html#cb113-31" tabindex="-1"></a>               <span class="at">cores =</span>parallel<span class="sc">::</span><span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>)     <span class="co"># Leave one core for housekeeping</span></span>
+<span id="cb113-32"><a href="parallel-computation-for-geospatial-analysis.html#cb113-32" tabindex="-1"></a></span>
+<span id="cb113-33"><a href="parallel-computation-for-geospatial-analysis.html#cb113-33" tabindex="-1"></a><span class="fu">names</span>(stat_brk)<span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;Mean&quot;</span>, <span class="st">&quot;Variance&quot;</span>, <span class="st">&quot;Skewness&quot;</span>)      <span class="co"># Add layer names</span></span>
+<span id="cb113-34"><a href="parallel-computation-for-geospatial-analysis.html#cb113-34" tabindex="-1"></a><span class="fu">toc</span>()</span></code></pre></div>
+<pre><code>## 4.34 sec elapsed</code></pre>
 <div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="parallel-computation-for-geospatial-analysis.html#cb115-1" tabindex="-1"></a><span class="fu">plot</span>(stat_brk, <span class="at">col=</span>mypal2)</span></code></pre></div>
 <p><img src="bookdownproj_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
 </div>
@@ -350,7 +352,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb121-9"><a href="parallel-computation-for-geospatial-analysis.html#cb121-9" tabindex="-1"></a><span class="fu">tic</span>()</span>
 <span id="cb121-10"><a href="parallel-computation-for-geospatial-analysis.html#cb121-10" tabindex="-1"></a>outStat<span class="ot">=</span> <span class="fu">future_lapply</span>(rasList, my_fun)</span>
 <span id="cb121-11"><a href="parallel-computation-for-geospatial-analysis.html#cb121-11" tabindex="-1"></a><span class="fu">toc</span>()</span></code></pre></div>
-<pre><code>## 42.91 sec elapsed</code></pre>
+<pre><code>## 23.37 sec elapsed</code></pre>
 <div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="parallel-computation-for-geospatial-analysis.html#cb123-1" tabindex="-1"></a><span class="co"># Check output for one layer</span></span>
 <span id="cb123-2"><a href="parallel-computation-for-geospatial-analysis.html#cb123-2" tabindex="-1"></a><span class="co"># outStat[[2]]</span></span></code></pre></div>
 </div>
@@ -375,107 +377,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb124-9"><a href="parallel-computation-for-geospatial-analysis.html#cb124-9" tabindex="-1"></a>                <span class="at">include_xy =</span> <span class="cn">FALSE</span>,  <span class="co"># Include cell lat-long in output?</span></span>
 <span id="cb124-10"><a href="parallel-computation-for-geospatial-analysis.html#cb124-10" tabindex="-1"></a>                <span class="at">fun =</span> <span class="cn">NULL</span>,          <span class="co"># Specify the function to apply for each feature extracted data</span></span>
 <span id="cb124-11"><a href="parallel-computation-for-geospatial-analysis.html#cb124-11" tabindex="-1"></a>                <span class="at">progress =</span> <span class="cn">TRUE</span>)     <span class="co"># Progressbar</span></span></code></pre></div>
-<pre><code>## 
-  |                                                                            
-  |                                                                      |   0%
-  |                                                                            
-  |=                                                                     |   2%
-  |                                                                            
-  |===                                                                   |   4%
-  |                                                                            
-  |====                                                                  |   6%
-  |                                                                            
-  |======                                                                |   8%
-  |                                                                            
-  |=======                                                               |  10%
-  |                                                                            
-  |=========                                                             |  12%
-  |                                                                            
-  |==========                                                            |  14%
-  |                                                                            
-  |===========                                                           |  16%
-  |                                                                            
-  |=============                                                         |  18%
-  |                                                                            
-  |==============                                                        |  20%
-  |                                                                            
-  |================                                                      |  22%
-  |                                                                            
-  |=================                                                     |  24%
-  |                                                                            
-  |===================                                                   |  27%
-  |                                                                            
-  |====================                                                  |  29%
-  |                                                                            
-  |=====================                                                 |  31%
-  |                                                                            
-  |=======================                                               |  33%
-  |                                                                            
-  |========================                                              |  35%
-  |                                                                            
-  |==========================                                            |  37%
-  |                                                                            
-  |===========================                                           |  39%
-  |                                                                            
-  |=============================                                         |  41%
-  |                                                                            
-  |==============================                                        |  43%
-  |                                                                            
-  |===============================                                       |  45%
-  |                                                                            
-  |=================================                                     |  47%
-  |                                                                            
-  |==================================                                    |  49%
-  |                                                                            
-  |====================================                                  |  51%
-  |                                                                            
-  |=====================================                                 |  53%
-  |                                                                            
-  |=======================================                               |  55%
-  |                                                                            
-  |========================================                              |  57%
-  |                                                                            
-  |=========================================                             |  59%
-  |                                                                            
-  |===========================================                           |  61%
-  |                                                                            
-  |============================================                          |  63%
-  |                                                                            
-  |==============================================                        |  65%
-  |                                                                            
-  |===============================================                       |  67%
-  |                                                                            
-  |=================================================                     |  69%
-  |                                                                            
-  |==================================================                    |  71%
-  |                                                                            
-  |===================================================                   |  73%
-  |                                                                            
-  |=====================================================                 |  76%
-  |                                                                            
-  |======================================================                |  78%
-  |                                                                            
-  |========================================================              |  80%
-  |                                                                            
-  |=========================================================             |  82%
-  |                                                                            
-  |===========================================================           |  84%
-  |                                                                            
-  |============================================================          |  86%
-  |                                                                            
-  |=============================================================         |  88%
-  |                                                                            
-  |===============================================================       |  90%
-  |                                                                            
-  |================================================================      |  92%
-  |                                                                            
-  |==================================================================    |  94%
-  |                                                                            
-  |===================================================================   |  96%
-  |                                                                            
-  |===================================================================== |  98%
-  |                                                                            
-  |======================================================================| 100%</code></pre>
+<pre><code>##   |                                                                              |                                                                      |   0%  |                                                                              |=                                                                     |   2%  |                                                                              |===                                                                   |   4%  |                                                                              |====                                                                  |   6%  |                                                                              |======                                                                |   8%  |                                                                              |=======                                                               |  10%  |                                                                              |=========                                                             |  12%  |                                                                              |==========                                                            |  14%  |                                                                              |===========                                                           |  16%  |                                                                              |=============                                                         |  18%  |                                                                              |==============                                                        |  20%  |                                                                              |================                                                      |  22%  |                                                                              |=================                                                     |  24%  |                                                                              |===================                                                   |  27%  |                                                                              |====================                                                  |  29%  |                                                                              |=====================                                                 |  31%  |                                                                              |=======================                                               |  33%  |                                                                              |========================                                              |  35%  |                                                                              |==========================                                            |  37%  |                                                                              |===========================                                           |  39%  |                                                                              |=============================                                         |  41%  |                                                                              |==============================                                        |  43%  |                                                                              |===============================                                       |  45%  |                                                                              |=================================                                     |  47%  |                                                                              |==================================                                    |  49%  |                                                                              |====================================                                  |  51%  |                                                                              |=====================================                                 |  53%  |                                                                              |=======================================                               |  55%  |                                                                              |========================================                              |  57%  |                                                                              |=========================================                             |  59%  |                                                                              |===========================================                           |  61%  |                                                                              |============================================                          |  63%  |                                                                              |==============================================                        |  65%  |                                                                              |===============================================                       |  67%  |                                                                              |=================================================                     |  69%  |                                                                              |==================================================                    |  71%  |                                                                              |===================================================                   |  73%  |                                                                              |=====================================================                 |  76%  |                                                                              |======================================================                |  78%  |                                                                              |========================================================              |  80%  |                                                                              |=========================================================             |  82%  |                                                                              |===========================================================           |  84%  |                                                                              |============================================================          |  86%  |                                                                              |=============================================================         |  88%  |                                                                              |===============================================================       |  90%  |                                                                              |================================================================      |  92%  |                                                                              |==================================================================    |  94%  |                                                                              |===================================================================   |  96%  |                                                                              |===================================================================== |  98%  |                                                                              |======================================================================| 100%</code></pre>
 <div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="parallel-computation-for-geospatial-analysis.html#cb126-1" tabindex="-1"></a><span class="fu">length</span>(featureData) <span class="co"># Same as feature count in CONUS? i.e. nrow(conus) </span></span></code></pre></div>
 <pre><code>## [1] 49</code></pre>
 <div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="parallel-computation-for-geospatial-analysis.html#cb128-1" tabindex="-1"></a><span class="co"># Lets try out data for Texas</span></span>
@@ -516,6 +418,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb133-23"><a href="parallel-computation-for-geospatial-analysis.html#cb133-23" tabindex="-1"></a>  },<span class="at">error =</span><span class="cf">function</span>(e){<span class="fu">return</span>(<span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">3</span>))}) <span class="co"># If Error== TRUE, return array with NA</span></span>
 <span id="cb133-24"><a href="parallel-computation-for-geospatial-analysis.html#cb133-24" tabindex="-1"></a>}</span></code></pre></div>
 <p>Let’s apply <code>my_fun</code> to extracted data for each feature.</p>
+<p>The multiprocess option in the future package has been deprecated, and you should replace it with multisession for safe cross‑platform parallelization on Windows.</p>
+<p>It is generally recommended to use between 2 and 4 workers on Windows systems to ensure that parallel processing functions run smoothly and avoid stability issues.</p>
 <div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="parallel-computation-for-geospatial-analysis.html#cb134-1" tabindex="-1"></a><span class="co"># Test the function for one block</span></span>
 <span id="cb134-2"><a href="parallel-computation-for-geospatial-analysis.html#cb134-2" tabindex="-1"></a><span class="fu">my_fun</span>(featureData[[<span class="dv">5</span>]])</span></code></pre></div>
 <pre><code>## [1] 0.1727930 0.0095579 0.9876028</code></pre>
@@ -523,42 +427,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb136-2"><a href="parallel-computation-for-geospatial-analysis.html#cb136-2" tabindex="-1"></a><span class="fu">library</span>(parallel) </span>
 <span id="cb136-3"><a href="parallel-computation-for-geospatial-analysis.html#cb136-3" tabindex="-1"></a><span class="fu">library</span>(snow)</span>
 <span id="cb136-4"><a href="parallel-computation-for-geospatial-analysis.html#cb136-4" tabindex="-1"></a><span class="fu">library</span>(future.apply) </span>
-<span id="cb136-5"><a href="parallel-computation-for-geospatial-analysis.html#cb136-5" tabindex="-1"></a></span>
-<span id="cb136-6"><a href="parallel-computation-for-geospatial-analysis.html#cb136-6" tabindex="-1"></a><span class="fu">plan</span>(multiprocess, <span class="at">workers =</span> <span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>)</span>
-<span id="cb136-7"><a href="parallel-computation-for-geospatial-analysis.html#cb136-7" tabindex="-1"></a>outStat<span class="ot">=</span> <span class="fu">future_lapply</span>(featureData, my_fun)</span>
-<span id="cb136-8"><a href="parallel-computation-for-geospatial-analysis.html#cb136-8" tabindex="-1"></a></span>
-<span id="cb136-9"><a href="parallel-computation-for-geospatial-analysis.html#cb136-9" tabindex="-1"></a><span class="co"># Test output for one feature</span></span>
-<span id="cb136-10"><a href="parallel-computation-for-geospatial-analysis.html#cb136-10" tabindex="-1"></a>outStat[[<span class="dv">5</span>]]  <span class="co"># Is this the same as before?</span></span></code></pre></div>
+<span id="cb136-5"><a href="parallel-computation-for-geospatial-analysis.html#cb136-5" tabindex="-1"></a><span class="fu">library</span>(future)</span>
+<span id="cb136-6"><a href="parallel-computation-for-geospatial-analysis.html#cb136-6" tabindex="-1"></a></span>
+<span id="cb136-7"><a href="parallel-computation-for-geospatial-analysis.html#cb136-7" tabindex="-1"></a><span class="co"># Cross-platform safe option (works everywhere)</span></span>
+<span id="cb136-8"><a href="parallel-computation-for-geospatial-analysis.html#cb136-8" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="parallel-computation-for-geospatial-analysis.html#cb137-1" tabindex="-1"></a>outStat <span class="ot">&lt;-</span> <span class="fu">future_lapply</span>(featureData, my_fun)</span>
+<span id="cb137-2"><a href="parallel-computation-for-geospatial-analysis.html#cb137-2" tabindex="-1"></a></span>
+<span id="cb137-3"><a href="parallel-computation-for-geospatial-analysis.html#cb137-3" tabindex="-1"></a><span class="co"># Test output for one feature</span></span>
+<span id="cb137-4"><a href="parallel-computation-for-geospatial-analysis.html#cb137-4" tabindex="-1"></a>outStat[[<span class="dv">5</span>]]  <span class="co"># Is this the same as before?</span></span></code></pre></div>
 <pre><code>## [1] 0.1727930 0.0095579 0.9876028</code></pre>
-<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="parallel-computation-for-geospatial-analysis.html#cb138-1" tabindex="-1"></a><span class="co"># Extract each summary stats for all features from the output list  </span></span>
-<span id="cb138-2"><a href="parallel-computation-for-geospatial-analysis.html#cb138-2" tabindex="-1"></a>FeatureMean<span class="ot">=</span><span class="fu">sapply</span>(outStat,<span class="st">&quot;[[&quot;</span>,<span class="dv">1</span>)  <span class="co"># Extract mean for all features</span></span>
-<span id="cb138-3"><a href="parallel-computation-for-geospatial-analysis.html#cb138-3" tabindex="-1"></a>FeatureVar<span class="ot">=</span><span class="fu">sapply</span>(outStat,<span class="st">&quot;[[&quot;</span>,<span class="dv">2</span>)   <span class="co"># Extract variance for all features</span></span>
-<span id="cb138-4"><a href="parallel-computation-for-geospatial-analysis.html#cb138-4" tabindex="-1"></a>FeatureSkew<span class="ot">=</span><span class="fu">sapply</span>(outStat,<span class="st">&quot;[[&quot;</span>,<span class="dv">3</span>)  <span class="co"># Extract skewness for all features</span></span>
-<span id="cb138-5"><a href="parallel-computation-for-geospatial-analysis.html#cb138-5" tabindex="-1"></a></span>
-<span id="cb138-6"><a href="parallel-computation-for-geospatial-analysis.html#cb138-6" tabindex="-1"></a><span class="co"># Let&#39;s place mean statistics as an attribute to the shapefile</span></span>
-<span id="cb138-7"><a href="parallel-computation-for-geospatial-analysis.html#cb138-7" tabindex="-1"></a>conus<span class="sc">$</span>meanSM<span class="ot">=</span>FeatureMean</span>
-<span id="cb138-8"><a href="parallel-computation-for-geospatial-analysis.html#cb138-8" tabindex="-1"></a></span>
-<span id="cb138-9"><a href="parallel-computation-for-geospatial-analysis.html#cb138-9" tabindex="-1"></a><span class="co"># Plot mean soil moisture map for CONUS </span></span>
-<span id="cb138-10"><a href="parallel-computation-for-geospatial-analysis.html#cb138-10" tabindex="-1"></a><span class="fu">library</span>(rcartocolor)</span>
-<span id="cb138-11"><a href="parallel-computation-for-geospatial-analysis.html#cb138-11" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb138-12"><a href="parallel-computation-for-geospatial-analysis.html#cb138-12" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb138-13"><a href="parallel-computation-for-geospatial-analysis.html#cb138-13" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
-<span id="cb138-14"><a href="parallel-computation-for-geospatial-analysis.html#cb138-14" tabindex="-1"></a></span>
-<span id="cb138-15"><a href="parallel-computation-for-geospatial-analysis.html#cb138-15" tabindex="-1"></a>mean_map<span class="ot">=</span><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb138-16"><a href="parallel-computation-for-geospatial-analysis.html#cb138-16" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> <span class="fu">st_as_sf</span>(conus), <span class="co"># CONUS shp as sf object (simple feature)</span></span>
-<span id="cb138-17"><a href="parallel-computation-for-geospatial-analysis.html#cb138-17" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> meanSM)) <span class="sc">+</span>   <span class="co"># Plot fill color= mean soil moisture</span></span>
-<span id="cb138-18"><a href="parallel-computation-for-geospatial-analysis.html#cb138-18" tabindex="-1"></a>  <span class="fu">scale_fill_carto_c</span>(<span class="at">palette =</span> <span class="st">&quot;BluYl&quot;</span>,     <span class="co"># Using carto color palette</span></span>
-<span id="cb138-19"><a href="parallel-computation-for-geospatial-analysis.html#cb138-19" tabindex="-1"></a>                     <span class="at">name =</span> <span class="st">&quot;Mean SM&quot;</span>,      <span class="co"># Legend name</span></span>
-<span id="cb138-20"><a href="parallel-computation-for-geospatial-analysis.html#cb138-20" tabindex="-1"></a>                     <span class="at">na.value =</span> <span class="st">&quot;#e9e9e9&quot;</span>,  <span class="co"># Fill values for NA </span></span>
-<span id="cb138-21"><a href="parallel-computation-for-geospatial-analysis.html#cb138-21" tabindex="-1"></a>                     <span class="at">direction =</span> <span class="dv">1</span>)<span class="sc">+</span>        <span class="co"># To invert color, use -1</span></span>
-<span id="cb138-22"><a href="parallel-computation-for-geospatial-analysis.html#cb138-22" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">crs =</span> <span class="dv">2163</span>)<span class="sc">+</span>   <span class="co"># Reprojecting polygon 4326 or 3083 </span></span>
-<span id="cb138-23"><a href="parallel-computation-for-geospatial-analysis.html#cb138-23" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span>          <span class="co"># Plot theme. Try: theme_bw</span></span>
-<span id="cb138-24"><a href="parallel-computation-for-geospatial-analysis.html#cb138-24" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.1</span>),  </span>
-<span id="cb138-25"><a href="parallel-computation-for-geospatial-analysis.html#cb138-25" tabindex="-1"></a>        <span class="at">legend.direction =</span> <span class="st">&quot;horizontal&quot;</span>,</span>
-<span id="cb138-26"><a href="parallel-computation-for-geospatial-analysis.html#cb138-26" tabindex="-1"></a>        <span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">5</span>, <span class="st">&quot;mm&quot;</span>),</span>
-<span id="cb138-27"><a href="parallel-computation-for-geospatial-analysis.html#cb138-27" tabindex="-1"></a>        <span class="at">legend.key.height =</span> <span class="fu">unit</span>(<span class="dv">4</span>, <span class="st">&quot;mm&quot;</span>))</span>
-<span id="cb138-28"><a href="parallel-computation-for-geospatial-analysis.html#cb138-28" tabindex="-1"></a>mean_map</span></code></pre></div>
-<p><img src="bookdownproj_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="parallel-computation-for-geospatial-analysis.html#cb139-1" tabindex="-1"></a><span class="co"># Extract each summary stats for all features from the output list  </span></span>
+<span id="cb139-2"><a href="parallel-computation-for-geospatial-analysis.html#cb139-2" tabindex="-1"></a>FeatureMean<span class="ot">=</span><span class="fu">sapply</span>(outStat,<span class="st">&quot;[[&quot;</span>,<span class="dv">1</span>)  <span class="co"># Extract mean for all features</span></span>
+<span id="cb139-3"><a href="parallel-computation-for-geospatial-analysis.html#cb139-3" tabindex="-1"></a>FeatureVar<span class="ot">=</span><span class="fu">sapply</span>(outStat,<span class="st">&quot;[[&quot;</span>,<span class="dv">2</span>)   <span class="co"># Extract variance for all features</span></span>
+<span id="cb139-4"><a href="parallel-computation-for-geospatial-analysis.html#cb139-4" tabindex="-1"></a>FeatureSkew<span class="ot">=</span><span class="fu">sapply</span>(outStat,<span class="st">&quot;[[&quot;</span>,<span class="dv">3</span>)  <span class="co"># Extract skewness for all features</span></span>
+<span id="cb139-5"><a href="parallel-computation-for-geospatial-analysis.html#cb139-5" tabindex="-1"></a></span>
+<span id="cb139-6"><a href="parallel-computation-for-geospatial-analysis.html#cb139-6" tabindex="-1"></a><span class="co"># Let&#39;s place mean statistics as an attribute to the shapefile</span></span>
+<span id="cb139-7"><a href="parallel-computation-for-geospatial-analysis.html#cb139-7" tabindex="-1"></a>conus<span class="sc">$</span>meanSM<span class="ot">=</span>FeatureMean</span></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="parallel-computation-for-geospatial-analysis.html#cb140-1" tabindex="-1"></a><span class="co"># Plot mean soil moisture map for CONUS </span></span>
+<span id="cb140-2"><a href="parallel-computation-for-geospatial-analysis.html#cb140-2" tabindex="-1"></a><span class="fu">library</span>(rcartocolor)</span>
+<span id="cb140-3"><a href="parallel-computation-for-geospatial-analysis.html#cb140-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb140-4"><a href="parallel-computation-for-geospatial-analysis.html#cb140-4" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb140-5"><a href="parallel-computation-for-geospatial-analysis.html#cb140-5" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
+<span id="cb140-6"><a href="parallel-computation-for-geospatial-analysis.html#cb140-6" tabindex="-1"></a></span>
+<span id="cb140-7"><a href="parallel-computation-for-geospatial-analysis.html#cb140-7" tabindex="-1"></a>mean_map<span class="ot">=</span><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb140-8"><a href="parallel-computation-for-geospatial-analysis.html#cb140-8" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> <span class="fu">st_as_sf</span>(conus), <span class="co"># CONUS shp as sf object (simple feature)</span></span>
+<span id="cb140-9"><a href="parallel-computation-for-geospatial-analysis.html#cb140-9" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> meanSM)) <span class="sc">+</span>   <span class="co"># Plot fill color= mean soil moisture</span></span>
+<span id="cb140-10"><a href="parallel-computation-for-geospatial-analysis.html#cb140-10" tabindex="-1"></a>  <span class="fu">scale_fill_carto_c</span>(<span class="at">palette =</span> <span class="st">&quot;BluYl&quot;</span>,     <span class="co"># Using carto color palette</span></span>
+<span id="cb140-11"><a href="parallel-computation-for-geospatial-analysis.html#cb140-11" tabindex="-1"></a>                     <span class="at">name =</span> <span class="st">&quot;Mean SM&quot;</span>,      <span class="co"># Legend name</span></span>
+<span id="cb140-12"><a href="parallel-computation-for-geospatial-analysis.html#cb140-12" tabindex="-1"></a>                     <span class="at">na.value =</span> <span class="st">&quot;#e9e9e9&quot;</span>,  <span class="co"># Fill values for NA </span></span>
+<span id="cb140-13"><a href="parallel-computation-for-geospatial-analysis.html#cb140-13" tabindex="-1"></a>                     <span class="at">direction =</span> <span class="dv">1</span>)<span class="sc">+</span>        <span class="co"># To invert color, use -1</span></span>
+<span id="cb140-14"><a href="parallel-computation-for-geospatial-analysis.html#cb140-14" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">crs =</span> <span class="dv">2163</span>)<span class="sc">+</span>   <span class="co"># Reprojecting polygon 4326 or 3083 </span></span>
+<span id="cb140-15"><a href="parallel-computation-for-geospatial-analysis.html#cb140-15" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span>          <span class="co"># Plot theme. Try: theme_bw</span></span>
+<span id="cb140-16"><a href="parallel-computation-for-geospatial-analysis.html#cb140-16" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.1</span>),  </span>
+<span id="cb140-17"><a href="parallel-computation-for-geospatial-analysis.html#cb140-17" tabindex="-1"></a>        <span class="at">legend.direction =</span> <span class="st">&quot;horizontal&quot;</span>,</span>
+<span id="cb140-18"><a href="parallel-computation-for-geospatial-analysis.html#cb140-18" tabindex="-1"></a>        <span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">5</span>, <span class="st">&quot;mm&quot;</span>),</span>
+<span id="cb140-19"><a href="parallel-computation-for-geospatial-analysis.html#cb140-19" tabindex="-1"></a>        <span class="at">legend.key.height =</span> <span class="fu">unit</span>(<span class="dv">4</span>, <span class="st">&quot;mm&quot;</span>))</span>
+<span id="cb140-20"><a href="parallel-computation-for-geospatial-analysis.html#cb140-20" tabindex="-1"></a>mean_map</span></code></pre></div>
+<p><img src="bookdownproj_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
 <p>For more information on parallel computing, check out the chapter: <a href="https://vinit-sehgal.github.io/AGRO4092/ch9.html" class="uri">https://vinit-sehgal.github.io/AGRO4092/ch9.html</a></p>
 <hr />
 </div>
@@ -601,7 +506,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/Vinit-Sehgal/lgar/edit/main/02-Largescale_Geospatial_Analysis.Rmd",
+"link": "https://github.com/Vinit-Sehgal/lgar/edit/main/02-Largescale_Geospatial_Analysis_2025.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -609,7 +514,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/Vinit-Sehgal/lgar/blob/main/02-Largescale_Geospatial_Analysis.Rmd",
+"link": "https://github.com/Vinit-Sehgal/lgar/blob/main/02-Largescale_Geospatial_Analysis_2025.Rmd",
 "text": null
 },
 "download": ["bookdownproj.pdf"],
